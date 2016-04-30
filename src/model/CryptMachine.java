@@ -12,4 +12,8 @@ public class CryptMachine {
 	public String crypt(String st) {
 		return this.engine.crypt(st);
 	}
+	
+	public String unCrypt(String st) {
+		return this.engine.unCrypt(st);
+	}
 }

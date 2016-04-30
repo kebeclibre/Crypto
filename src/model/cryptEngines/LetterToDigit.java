@@ -1,46 +1,45 @@
 package model.cryptEngines;
 
 import java.io.BufferedReader;
+import java.io.UnsupportedEncodingException;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class LetterToDigit extends CryptEngine {
-	
-	public LetterToDigit() {
-		super.setInput("abcdefghijklmnopqrstuvwxyz");
-		super.setOutput("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26");
-		makeTable();
-	}
 
 	public String crypt(String st) {
+		st = st.toLowerCase();
 		StringBuffer sb = new StringBuffer();
-		
-		for (int i = 0; i<st.length();i++) {
-			
-			sb.append(super.getTable().get(st.charAt(i)));
-			sb.append('-');
+		byte[] bytes;
+		try {
+			bytes = st.getBytes("ASCII");
+			for (Byte b : bytes) {
+				sb.append(b.byteValue()-96+"-");
+			}
+			sb.deleteCharAt(sb.length()-1);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		sb.deleteCharAt(sb.length()-1);
 		return sb.toString();
+		
+
 	}
 
 	@Override
 	public String unCrypt(String st) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	private void makeTable(){
-		Map<Character,String> table = new TreeMap<>();
-		String[] out = super.getOutput().split(",");		
-		if (super.getInput().length() == out.length) {
-			for (int i = 0; i<super.getInput().length();i++) {
-				table.put(super.getInput().charAt(i),out[i]);
-			}
+		String[] stb = st.split("-");
+		StringBuffer sb = new StringBuffer();
+		
+		for (String stc : stb) {
+			Integer toByte = Byte.parseByte(stc) + 96;
+			char[] charArray = Character.toChars(toByte);
+			sb.append(charArray);
+			
 		}
-		super.setTable(table);
+		return sb.toString();
+		
 	}
 	
-
 }
